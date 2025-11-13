@@ -66,7 +66,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out
+          path: ./apps/web/out  # 根据你的项目结构调整路径
 
   deploy:
     environment:
