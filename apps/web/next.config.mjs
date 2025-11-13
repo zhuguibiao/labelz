@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-console.log("PAGES_BASE_PATH:", process.env.PAGES_BASE_PATH);
+
 const nextConfig = {
   transpilePackages: ["@labelz/ui"],
   reactStrictMode: false,
