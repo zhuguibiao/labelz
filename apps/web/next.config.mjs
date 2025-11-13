@@ -4,8 +4,8 @@ const nextConfig = {
   transpilePackages: ["@labelz/ui"],
   reactStrictMode: false,
   output: "export",
-  basePath: process.env.PAGES_BASE_PATH,
-  
+  basePath: '/labelz',
+  assetPrefix: '/labelz/', 
   eslint: {
     ignoreDuringBuilds: true,
     dirs: [
