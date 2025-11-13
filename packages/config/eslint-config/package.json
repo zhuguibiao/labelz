@@ -1,0 +1,25 @@
+{
+  "name": "@labelz/eslint-config",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    "./base": "./base.js",
+    "./next-js": "./next.js",
+    "./react-internal": "./react-internal.js"
+  },
+  "devDependencies": {
+    "@next/eslint-plugin-next": "catalog:cli",
+    "@typescript-eslint/eslint-plugin": "catalog:cli",
+    "@typescript-eslint/parser": "catalog:cli",
+    "eslint": "catalog:cli",
+    "eslint-config-prettier": "catalog:cli",
+    "eslint-plugin-only-warn": "catalog:cli",
+    "eslint-plugin-react": "catalog:cli",
+    "eslint-plugin-react-hooks": "catalog:cli",
+    "eslint-plugin-turbo": "catalog:cli",
+    "globals": "catalog:cli",
+    "typescript": "catalog:cli",
+    "typescript-eslint": "catalog:cli"
+  }
+}

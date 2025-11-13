@@ -1,0 +1,4 @@
+{
+  "extends": "@labelz/typescript-config/base.json"
+}
+

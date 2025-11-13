@@ -1,0 +1,36 @@
+{
+  "name": "@labelz/web",
+  "version": "0.0.1",
+  "type": "module",
+  "homepage": "https://zhuguibiao.github.io/labelz",
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "typecheck": "tsc --noEmit",
+    "deploy": "pnpm build && gh-pages -d out"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^3.7.2",
+    "@labelz/mark-board": "workspace:*",
+    "@labelz/ui": "workspace:*",
+    "jszip": "^3.10.1",
+    "lucide-react": "^0.475.0",
+    "next": "^15.4.5",
+    "next-themes": "^0.4.6",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "zustand": "^5.0.8"
+  },
+  "devDependencies": {
+    "@labelz/eslint-config": "workspace:^",
+    "@labelz/typescript-config": "workspace:*",
+    "@types/node": "^20.19.9",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
+    "gh-pages": "^6.3.0",
+    "typescript": "^5.9.2"
+  }
+}

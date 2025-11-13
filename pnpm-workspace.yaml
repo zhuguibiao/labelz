@@ -1,0 +1,24 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "packages/config/*"
+
+catalogs:
+  cli:
+    '@next/eslint-plugin-next': ^15.4.5
+    '@typescript-eslint/eslint-plugin': ^8.39.0
+    '@typescript-eslint/parser': ^8.39.0
+    eslint: ^9.32.0
+    eslint-config-prettier: ^9.1.2
+    eslint-plugin-only-warn: ^1.1.0
+    eslint-plugin-react: ^7.37.5
+    eslint-plugin-react-hooks: ^5.2.0
+    eslint-plugin-turbo: ^2.5.5
+    globals: ^15.15.0
+    prettier: ^3.6.2
+    turbo: ^2.5.5
+    typescript: ^5.9.3
+    typescript-eslint: ^8.46.4
+    vite: ^7.2.2
+    vite-plugin-dts: ^4.5.4
+  
