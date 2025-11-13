@@ -1,7 +1,7 @@
 {
   "name": "labelz",
   "version": "0.0.1",
-  "private": true,
+  "homepage": "https://zhuguibiao.github.io/labelz",
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
