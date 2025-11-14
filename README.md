@@ -5,7 +5,7 @@
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/zhuguibiao/labelz)
 
 ## 网页版本
-[demo](zhuguibiao.github.io/labelz/)
+[demo](https://zhuguibiao.github.io/labelz/)
 
 ## app版本
 [下载地址](https://github.com/zhuguibiao/labelz/releases)
