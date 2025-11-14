@@ -140,7 +140,7 @@ export function ImageSidebar({
           </Button>
         </CollapsibleTrigger>
         <CollapsibleContent className="flex-1 overflow-hidden">
-          <ScrollArea className="h-[calc(100vh-420px)] px-4">
+          <ScrollArea className="h-[calc(100vh-380px)] px-4">
             <div className="space-y-2 pb-4">
               {images.length === 0 ? (
                 <div className="text-center py-8">

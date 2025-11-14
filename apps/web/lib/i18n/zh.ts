@@ -9,7 +9,7 @@ const zh = {
 
   /** header */
   annotation: "标注",
-  back_to_home: "返回首页",
+  back_to_home: "返回",
   light: "浅色",
   dark: "深色",
   system: "系统",

@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "vite build --watch",
     "build": "vite build"
   },
   "types": "./dist/index.d.ts",

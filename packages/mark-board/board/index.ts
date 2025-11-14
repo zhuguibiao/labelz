@@ -529,18 +529,19 @@ export default class CanvasMarkBoard implements ICanvasMarkBoard {
   async windowKeydown(e: KeyboardEvent) {
     if (e.code == "Space") {
       this.setMoveEditStatus(true);
-      e.preventDefault();
+      // e.preventDefault();
     }
     if (e.code == "NumpadEnter" || e.code == "Enter") {
       let obj = this.markObjectList[this.markObjectList.length - 1];
       if (obj?.status == "draw") {
+        e.preventDefault();
         await obj.complete();
       }
     }
     if (e.code === "Delete" || e.code === "Backspace") {
-      e.preventDefault()
       // 删除选中的标注对象
-      if (this.selectObject) {
+      if (this.selectObject && this.selectObject.status === "edit") {
+        e.preventDefault();
         this.deleteObject(this.selectObject.id);
       }
     }

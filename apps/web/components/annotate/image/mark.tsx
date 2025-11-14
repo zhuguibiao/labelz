@@ -79,14 +79,11 @@ export function Mark({
       });
     };
     const onResize = () => {
-      if (canvas.img) {
-        canvas.handleResize()
-      }
+      canvas.handleResize();
     };
     const onkeydown = (e: KeyboardEvent) => {
       onKeyDownRef.current?.(e);
     };
-
     canvas.on("ondraw", onDraw);
     canvas.on("onchange", onChange);
     canvas.on("oncomplete", onComplete);
