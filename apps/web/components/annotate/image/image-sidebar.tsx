@@ -30,7 +30,7 @@ interface ImageSidebarProps {
   currentIndex: any;
   labels: string[];
   onImagesUploaded: (images: any[]) => void;
-  onImageSelect: (mark: any, index: any) => void;
+  onImageSelect: (index: any) => void;
   onLabelsChange: (labels: string[]) => void;
 }
 
@@ -50,6 +50,10 @@ export function ImageSidebar({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
+      // 释放旧的 URL，避免泄漏
+      images.forEach((img) => {
+        if (img.imageUrl) URL.revokeObjectURL(img.imageUrl);
+      });
       const uploadedFiles = Array.from(e.target.files);
       const markItems = uploadedFiles.map((file, index) => ({
         id: Date.now() + index,
@@ -57,7 +61,7 @@ export function ImageSidebar({
         imageUrl: URL.createObjectURL(file),
         shapes: [],
       }));
-      onImagesUploaded(markItems);
+      onImagesUploaded([...markItems]);
     }
   };
 
@@ -130,7 +134,7 @@ export function ImageSidebar({
                     className={`flex items-center gap-2 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors ${
                       currentIndex === index ? "bg-muted" : ""
                     }`}
-                    onClick={() => onImageSelect(mark, index)}
+                    onClick={() => onImageSelect(index)}
                   >
                     <div className="w-10 h-10 relative rounded overflow-hidden flex-shrink-0">
                       <Image

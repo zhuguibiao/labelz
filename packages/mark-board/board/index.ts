@@ -345,6 +345,7 @@ export default class CanvasMarkBoard implements ICanvasMarkBoard {
     ) {
       this.selectObject = undefined;
     } else {
+      this.emit("onchange");
       let index = this.getSelectedIndex(point);
       if (index !== undefined && this.markObjectList[index]) {
         if (
@@ -367,7 +368,6 @@ export default class CanvasMarkBoard implements ICanvasMarkBoard {
     this.mouseDown = false;
     this.drag = false;
     this.getDrawMark("boxMouseup", point);
-    this.emit("onchange");
   }
   /** 计算相对底图的坐标点位 */
   pointMapping(point: MouseEvent): IPointData {

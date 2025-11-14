@@ -1,6 +1,6 @@
 "use client";
 
-import { KeyboardEvent, useEffect, useRef } from "react";
+import { KeyboardEvent, useEffect, useRef, useImperativeHandle } from "react";
 import MarkCanvas from "@labelz/mark-board";
 import styles from "./mark.module.css";
 
@@ -19,7 +19,7 @@ export interface MarkConfig {
   shapes?: any;
 }
 
-export interface ref {
+export interface MarkRef {
   clear: () => void;
   setDrawType: (type: any) => void;
   getSelectObject: () => void;
@@ -29,14 +29,13 @@ export interface ref {
   setShapes: (list: ShapeItem[]) => void;
   setConfig: (cfg: MarkConfig) => void;
   getObjects: () => any[];
-  canvas: MarkCanvas;
+  getInstance: () => MarkCanvas;
 }
-
 interface MarkProps {
   markItem?: MarkConfig;
   onShapeChange?: (b: any) => void;
   onKeyDown?: (b: any) => void;
-  ref?: React.RefObject<ref | null>;
+  ref?: React.RefObject<MarkRef | null>;
 }
 
 export function Mark({
@@ -123,7 +122,7 @@ export function Mark({
           if (img) canvas.setBackground(img);
         },
         getObjects: () => canvas.objects,
-        canvas: canvas,
+        getInstance: () => canvas,
       };
     }
 

@@ -45,7 +45,7 @@ export function exportDefalutJson(dataset: Data[]) {
       null,
       2
     ),
-    "coco_annotations.json"
+    "annotations.json"
   );
   // return dataset;
 }

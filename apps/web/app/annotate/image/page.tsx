@@ -5,24 +5,21 @@ import { AnnotationHeader } from "@/components/header";
 import { ImageAnnotator } from "@/components/annotate/image/image-annotator";
 import { ImageSidebar } from "@/components/annotate/image/image-sidebar";
 import { useShallow } from "zustand/shallow";
-import { useEffect } from "react";
 import { useI18n } from "@/components/i18n-provider";
+import { useBeforeUnload } from "@/hooks/useBeforeUnload";
 
 export default function ImageAnnotationPage() {
   const { t } = useI18n();
   const {
     images,
     currentIndex,
-    drawInstance,
     setImages,
     setCurrentIndex,
     labels,
     setLabels,
     showImageList,
-    setDrawType,
   } = useImageAnnotationStore(
     useShallow((state) => ({
-      drawInstance: state.drawInstance,
       images: state.images,
       currentIndex: state.currentIndex,
       setImages: state.setImages,
@@ -30,27 +27,19 @@ export default function ImageAnnotationPage() {
       labels: state.labels,
       setLabels: state.setLabels,
       showImageList: state.showImageList,
-      setDrawType: state.setDrawType,
     }))
   );
 
+  useBeforeUnload({
+    enabled: true,
+  });
+
   const handleMarksUploaded = (uploadedMarks: any[]) => {
     setImages(uploadedMarks);
-    setCurrentIndex(0);
+    setCurrentIndex(-1);
   };
 
-  useEffect(() => {
-    if (drawInstance.clear) {
-      drawInstance?.clear?.();
-      drawInstance?.setShapes?.(images[currentIndex].shapes);
-      drawInstance.setDrawType?.(
-        drawInstance.canvas.currentDrawingType || "rect"
-      );
-      setDrawType?.(drawInstance.canvas.currentDrawingType);
-    }
-  }, [images, currentIndex, drawInstance]);
-
-  const handleMarkSelect = (mark: any, index: any) => {
+  const handleMarkSelect = (index: any) => {
     setCurrentIndex(index);
   };
 

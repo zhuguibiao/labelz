@@ -1,26 +1,15 @@
 /** @type {import('next').NextConfig} */
+const isProd = process.env.NODE_ENV === "production";
 
 const nextConfig = {
   transpilePackages: ["@labelz/ui"],
   reactStrictMode: false,
   output: "export",
-  basePath: '/labelz',
-  assetPrefix: '/labelz/', 
+  basePath: isProd ? "/labelz" : "",
+  assetPrefix: isProd ? "/labelz/" : "",
   eslint: {
     ignoreDuringBuilds: true,
-    dirs: [
-      "app",
-      "bin",
-      "config",
-      "context",
-      "hooks",
-      "i18n",
-      "models",
-      "service",
-      "test",
-      "types",
-      "utils",
-    ],
+    dirs: ["app", "config", "hooks", "lib", "test", "types", "utils"],
   },
 };
 

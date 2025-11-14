@@ -46,13 +46,10 @@ export function ImageAnnotator({ item, labels }: ImageAnnotatorProps) {
     setImages,
     currentIndex,
     setCurrentIndex,
-    drawInstance,
     setDrawType,
-    setDrwaInstance,
   } = useImageAnnotationStore(
     useShallow((state) => ({
       setCurrentIndex: state.setCurrentIndex,
-      drawInstance: state.drawInstance,
       setDrwaInstance: state.setDrwaInstance,
       drawType: state.drawType,
       images: state.images,
@@ -63,14 +60,15 @@ export function ImageAnnotator({ item, labels }: ImageAnnotatorProps) {
   );
 
   useEffect(() => {
-    setDrwaInstance(markRef.current);
-  }, [markRef.current]);
-
-  useEffect(() => {
-    if (drawInstance.setImg) {
-      drawInstance.setImg(item.imageUrl);
+    if (currentIndex > -1 && item.imageUrl) {
+      const instance = markRef.current.getInstance();
+      markRef.current.setImg(item.imageUrl);
+      markRef.current?.clear?.();
+      markRef.current?.setShapes?.(images[currentIndex].shapes);
+      setDrawType(instance.currentDrawingType || "rect");
+      instance.setDrawType(instance.currentDrawingType || "rect");
     }
-  }, [currentIndex, drawInstance]);
+  }, [currentIndex, item]);
 
   const onShapeChange = useCallback(
     (shapes: any[]) => {
@@ -95,7 +93,7 @@ export function ImageAnnotator({ item, labels }: ImageAnnotatorProps) {
   };
 
   const onApplyDetection = (shapes: any) => {
-    drawInstance.setShapes(shapes);
+    markRef.current.setShapes(shapes);
   };
 
   return (
@@ -109,7 +107,7 @@ export function ImageAnnotator({ item, labels }: ImageAnnotatorProps) {
                 variant={drawType === "rect" ? "secondary" : "ghost"}
                 onClick={() => {
                   setDrawType("rect");
-                  drawInstance.setDrawType("rect");
+                  markRef.current.setDrawType("rect");
                 }}
               >
                 <Square className="h-4 w-4" />
@@ -120,7 +118,7 @@ export function ImageAnnotator({ item, labels }: ImageAnnotatorProps) {
                 variant={drawType === "polygon" ? "secondary" : "ghost"}
                 onClick={() => {
                   setDrawType("polygon");
-                  drawInstance.setDrawType("polygon");
+                  markRef.current.setDrawType("polygon");
                 }}
               >
                 <Hexagon className="h-4 w-4" />
@@ -131,7 +129,7 @@ export function ImageAnnotator({ item, labels }: ImageAnnotatorProps) {
                 variant={drawType === "circle" ? "secondary" : "ghost"}
                 onClick={() => {
                   setDrawType("circle");
-                  drawInstance.setDrawType("circle");
+                  markRef.current.setDrawType("circle");
                 }}
               >
                 <Circle className="h-4 w-4" />
@@ -223,18 +221,17 @@ export function ImageAnnotator({ item, labels }: ImageAnnotatorProps) {
           />
         </div>
       </div>
-      {/* 导出功能 */}
 
+      {/* annotation list */}
       <AnnotationList
-        // annotations={[]}
         annotations={annotations}
         onAnnotationSelect={(annotation) => {
-          drawInstance.setSelectShape(annotation.id);
+          markRef.current.setSelectShape(annotation.id);
         }}
         onAnnotationDelete={(id) => {
-          drawInstance.deleteShape(id);
+          markRef.current.deleteShape(id);
         }}
-        selectedId={drawInstance?.canvas?.selectObject?.id}
+        selectedId={markRef.current?.getSelectObject?.()?.id}
       />
     </div>
   );
