@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@labelz/ui/components/button";
 import { Switch } from "@labelz/ui/components/switch";
+import { toast } from "@labelz/ui/components/sonner";
 import {
   Select,
   SelectContent,
@@ -26,14 +27,10 @@ const modelMap = [
 function convertDetectionToAnnotation(detections: any[]): any[] {
   return detections.map((detection) => {
     const { box, label, score } = detection;
-
-    // 转换坐标点
-    // 注意：这里假设原始坐标已经是正确的，如果需要缩放或调整，可以在这里处理
     const pointList = [
       { x: box.xmin, y: box.ymin }, // 左上角
       { x: box.xmax, y: box.ymax }, // 右下角
     ];
-
     return {
       label: label, // 或者可以映射到固定标签，如 "Object"
       type: "rect",
@@ -96,7 +93,7 @@ export default function AiDetection({
           drawDetectionPreview(imgSrc, output);
           break;
         case "error":
-          console.error("❌ Worker 错误:", message);
+          toast.error(`❌ Worker 错误: ${message}`);
           setLoading(false);
           break;
       }
@@ -153,11 +150,11 @@ export default function AiDetection({
   // 执行检测
   const handleDetect = () => {
     if (!imageUrl) {
-      alert("请先选择图片");
+      toast.warning("请先选择图片");
       return;
     }
     if (!loaded) {
-      alert("请先加载模型");
+      toast.warning("请先加载模型");
       return;
     }
     if (!workerRef.current) return;
@@ -252,7 +249,6 @@ export default function AiDetection({
               {loaded ? t("loaded") : t("not_loaded")}
             </span>
           </div>
-
           {/* 检测结果统计 */}
           {detectionResults.length > -1 && (
             <div className="flex items-center justify-between text-xs">
@@ -298,11 +294,9 @@ export default function AiDetection({
             </Button>
           </div>
           {/* 提示信息 */}
-          {!loaded && (
-            <div className="text-xs text-gray-500 bg-gray-50 p-2 rounded">
-              {t("first_load_slow")}
-            </div>
-          )}
+          <div className="text-xs rounded text-muted-foreground">
+            {t("first_load_slow")}
+          </div>
           {/* 应用按钮 */}
           <div className="flex gap-2">
             <Button
@@ -316,8 +310,8 @@ export default function AiDetection({
             </Button>
           </div>
 
-          <div className="border rounded-md p-2 bg-gray-50">
-            <div className="text-xs font-medium  mb-2">
+          <div className="border rounded-md p-2 ">
+            <div className="text-xs font-medium mb-2">
               {t("detection_preview")}
             </div>
             <div className="overflow-auto max-h-40">

@@ -1,13 +1,13 @@
 import { create } from "zustand";
 
 export const defaultLabels = [
-  "Object",
+  "Car",
   "Person",
-  "Vehicle",
-  "Building",
   "Animal",
-  "Text",
-  "Logo",
+  "Cat",
+  "Dog",
+  "Building",
+  "Vehicle"
 ];
 
 interface ImageAnnotationState {
