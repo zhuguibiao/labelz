@@ -538,6 +538,7 @@ export default class CanvasMarkBoard implements ICanvasMarkBoard {
       }
     }
     if (e.code === "Delete" || e.code === "Backspace") {
+      e.preventDefault()
       // 删除选中的标注对象
       if (this.selectObject) {
         this.deleteObject(this.selectObject.id);

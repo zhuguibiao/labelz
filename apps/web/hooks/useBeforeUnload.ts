@@ -9,7 +9,6 @@ export function useBeforeUnload(options: UseBeforeUnloadOptions = {}) {
 
   useEffect(() => {
     // 开发环境不触发
-    return
     if (!enabled) return;
 
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
