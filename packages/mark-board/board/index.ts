@@ -165,6 +165,28 @@ export default class CanvasMarkBoard implements ICanvasMarkBoard {
       };
     });
   }
+
+  public handleResize() {
+    // update canvas
+    const { width: viewWidth, height: viewHeight } = this.viewDomInfo;
+    this.canvas.width = viewWidth;
+    this.canvas.height = viewHeight;
+    this.regionCanvas.width = viewWidth;
+    this.regionCanvas.height = viewHeight;
+    this.canvas.style.width = viewWidth + "px";
+    this.canvas.style.height = viewHeight + "px";
+    this.regionCanvas.style.width = viewWidth + "px";
+    this.regionCanvas.style.height = viewHeight + "px";
+    // 2. img
+    if (this.img) {
+      this.setLayout({
+        width: this.imgInfo.width,
+        height: this.imgInfo.height,
+      });
+    } else {
+      this.transfrom();
+    }
+  }
   /** transfrom board */
   transfrom() {
     MarkBoardUtils.applyDPR(this.ctx, this.canvas, this.t);

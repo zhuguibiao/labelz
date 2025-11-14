@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { Button } from "@labelz/ui/components/button";
 import {
   Select,
@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@labelz/ui/components/select";
-import { Square, Circle, Download, Hexagon } from "lucide-react";
+import { Square, Circle, Download, Hexagon, ImageIcon } from "lucide-react";
 import { Mark } from "./mark";
 import { useShallow } from "zustand/shallow";
 import { useImageAnnotationStore } from "@/app/annotate/image/imageStore";
@@ -62,19 +62,24 @@ export function ImageAnnotator({ item, labels }: ImageAnnotatorProps) {
   useEffect(() => {
     if (currentIndex > -1 && item.imageUrl) {
       const instance = markRef.current.getInstance();
-      markRef.current.setImg(item.imageUrl);
+      markRef.current?.setImg(item.imageUrl);
       markRef.current?.clear?.();
       markRef.current?.setShapes?.(images[currentIndex].shapes);
       setDrawType(instance.currentDrawingType || "rect");
       instance.setDrawType(instance.currentDrawingType || "rect");
+    } else if (currentIndex === -1) {
+      markRef.current?.clear?.();
+      setAnnotations([]);
     }
   }, [currentIndex, item]);
 
   const onShapeChange = useCallback(
     (shapes: any[]) => {
-      images[currentIndex].shapes = shapes;
-      setImages(images);
-      setAnnotations(shapes);
+      if (currentIndex > -1) {
+        images[currentIndex].shapes = shapes;
+        setImages(images);
+        setAnnotations(shapes);
+      }
     },
     [currentIndex]
   );
@@ -96,10 +101,19 @@ export function ImageAnnotator({ item, labels }: ImageAnnotatorProps) {
     markRef.current.setShapes(shapes);
   };
 
+  const Ai = useMemo(() => {
+    return (
+      <AiDetection
+        imageUrl={item.imageUrl}
+        onApplyDetection={onApplyDetection}
+      />
+    );
+  }, [item.imageUrl]);
+
   return (
     <div className="flex h-full w-full">
       <div className="flex flex-col flex-1 h-full">
-        <div className="border-b p-4">
+        <div className="border-b p-2">
           <div className="flex flex-wrap gap-2">
             <div className="flex gap-1 items-center border rounded-md">
               <Button
@@ -183,33 +197,31 @@ export function ImageAnnotator({ item, labels }: ImageAnnotatorProps) {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-              <AiDetection
-                imageUrl={item.imageUrl}
-                onApplyDetection={onApplyDetection}
-              />
+              {Ai}
             </div>
-
-            {/* <div className="flex items-center gap-2">
-            <Button variant="outline" size="icon">
-              <Undo className="h-4 w-4" />
-              <span className="sr-only">Undo</span>
-            </Button>
-            <Button variant="outline" size="icon">
-              <Redo className="h-4 w-4" />
-              <span className="sr-only">Redo</span>
-            </Button>
-            <Button variant="outline" size="icon" onClick={() => {}}>
-              <Trash2 className="h-4 w-4" />
-              <span className="sr-only">Clear All</span>
-            </Button>
-          </div> */}
           </div>
         </div>
 
-        <div className="flex-1 overflow-auto p-4 flex items-center justify-center bg-muted/30">
+        <div className="relative flex-1 overflow-auto p-4 flex items-center justify-center bg-muted/30">
+          {/* mark mark */}
+          {!(images.length && currentIndex > -1) && (
+            <div className="absolute inset-0 w-full h-full flex items-center justify-center z-10 bg-muted">
+              <div className="text-center space-y-4">
+                <ImageIcon className="w-20 h-20 mx-auto text-muted-foreground justify-center" />
+                <div>
+                  <h3 className="text-lg font-medium">
+                    {t("no_image_selected")}
+                  </h3>
+                  <p className="text-muted-foreground">
+                    {t("upload_images_from_left")}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           <Mark
             ref={markRef}
-            onKeyDown={onKeyDown}
             markItem={{
               id: item.id,
               label: selectedLabel,
@@ -217,6 +229,7 @@ export function ImageAnnotator({ item, labels }: ImageAnnotatorProps) {
               backgroundUrl: item.imageUrl,
               shapes: item.shapes,
             }}
+            onKeyDown={onKeyDown}
             onShapeChange={onShapeChange}
           />
         </div>

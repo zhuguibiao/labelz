@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-const defaultLabels = [
+export const defaultLabels = [
   "Object",
   "Person",
   "Vehicle",

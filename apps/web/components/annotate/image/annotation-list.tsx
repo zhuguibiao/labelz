@@ -27,7 +27,7 @@ export function AnnotationList({
   const { t } = useI18n();
   return (
     <div className="w-60 h-full border-l flex flex-col bg-background">
-      <div className="p-4 border-b">
+      <div className="p-5 border-b">
         <h3 className="font-medium">
           {t("annotations")} ({annotations.length})
         </h3>

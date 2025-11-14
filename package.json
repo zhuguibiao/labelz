@@ -3,12 +3,16 @@
   "version": "0.0.1",
   "homepage": "https://zhuguibiao.github.io/labelz",
   "scripts": {
-    "build": "turbo build",
+    "build": "NEXT_PUBLIC_TARGET=web turbo build",
+    "build:app": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "@tauri-apps/api": "catalog:cli",
+    "@tauri-apps/cli": "catalog:cli",
+    "@tauri-apps/plugin-opener": "catalog:cli",
     "@labelz/eslint-config": "workspace:*",
     "@labelz/typescript-config": "workspace:*",
     "prettier": "catalog:cli",

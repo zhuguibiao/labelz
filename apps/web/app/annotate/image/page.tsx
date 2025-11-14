@@ -31,7 +31,7 @@ export default function ImageAnnotationPage() {
   );
 
   useBeforeUnload({
-    enabled: true,
+    enabled: images.length > 0,
   });
 
   const handleMarksUploaded = (uploadedMarks: any[]) => {
@@ -43,58 +43,28 @@ export default function ImageAnnotationPage() {
     setCurrentIndex(index);
   };
 
+  const onLabelsChange = (newLabels: string[]) => {
+    localStorage.setItem("labels", JSON.stringify(newLabels));
+    setLabels(newLabels);
+  };
+
   return (
     <div className="flex h-screen flex-col">
       <AnnotationHeader type="image" />
       <div className="flex flex-1 overflow-hidden">
         {/* Left Sidebar - Images and Labels */}
-        {showImageList && (
-          <ImageSidebar
-            images={images}
-            currentIndex={currentIndex}
-            labels={labels}
-            onImagesUploaded={handleMarksUploaded}
-            onImageSelect={handleMarkSelect}
-            onLabelsChange={setLabels}
-          />
-        )}
+        <ImageSidebar
+          images={images}
+          currentIndex={currentIndex}
+          labels={labels}
+          onImagesUploaded={handleMarksUploaded}
+          onImageSelect={handleMarkSelect}
+          onLabelsChange={onLabelsChange}
+        />
 
         {/* Annotation Area */}
         <div className="flex-1 overflow-hidden">
-          {images.length && currentIndex > -1 ? (
-            <ImageAnnotator item={images[currentIndex]} labels={labels} />
-          ) : (
-            <div className="flex items-center justify-center h-full bg-muted/30">
-              <div className="text-center space-y-4">
-                <div className="w-24 h-24 mx-auto bg-muted rounded-lg flex items-center justify-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="h-12 w-12 text-muted-foreground"
-                  >
-                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-                    <circle cx="9" cy="9" r="2" />
-                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="text-lg font-medium">
-                    {t("no_image_selected")}
-                  </h3>
-                  <p className="text-muted-foreground">
-                    {showImageList
-                      ? t("upload_images_from_left")
-                      : "Show the image panel to upload and select images"}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+          <ImageAnnotator item={images?.[currentIndex] || {}} labels={labels} />
         </div>
       </div>
     </div>

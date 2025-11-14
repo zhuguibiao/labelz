@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@labelz/ui/components/button";
 import { Input } from "@labelz/ui/components/input";
@@ -24,6 +24,11 @@ import {
   Images,
 } from "lucide-react";
 import { useI18n } from "@/components/i18n-provider";
+import {
+  defaultLabels,
+  useImageAnnotationStore,
+} from "@/app/annotate/image/imageStore";
+import { useShallow } from "zustand/shallow";
 
 interface ImageSidebarProps {
   images: any[];
@@ -43,7 +48,12 @@ export function ImageSidebar({
   onLabelsChange,
 }: ImageSidebarProps) {
   const { t } = useI18n();
-  const [newLabel, setNewLabel] = useState("");
+  const { setLabels } = useImageAnnotationStore(
+    useShallow((state) => ({
+      setLabels: state.setLabels,
+    }))
+  );
+  const inputRef = useRef<HTMLInputElement>(null);
   const [showImages, setShowImages] = useState(true);
   const [showLabels, setShowLabels] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -66,9 +76,9 @@ export function ImageSidebar({
   };
 
   const addLabel = () => {
+    const newLabel = inputRef.current?.value || "";
     if (newLabel.trim() && !labels.includes(newLabel.trim())) {
       onLabelsChange([...labels, newLabel.trim()]);
-      setNewLabel("");
     }
   };
 
@@ -76,11 +86,19 @@ export function ImageSidebar({
     onLabelsChange(labels.filter((label) => label !== labelToRemove));
   };
 
+  useEffect(() => {
+    setLabels(
+      localStorage.getItem("labels")
+        ? JSON.parse(localStorage.getItem("labels")!)
+        : defaultLabels
+    );
+  }, []);
+
   return (
     <div className="w-70 border-r flex flex-col bg-background">
       {/* Upload Section */}
       <div className="p-4 border-b">
-        <h3 className="font-medium mb-3">{t("upload_images")}</h3>
+        {/* <h3 className="font-medium mb-3">{t("upload_images")}</h3> */}
         <div
           className="border-2 border-dashed rounded-lg p-1 text-center cursor-pointer hover:bg-muted/50 transition-colors"
           onClick={() => fileInputRef.current?.click()}
@@ -101,7 +119,11 @@ export function ImageSidebar({
       </div>
 
       {/* images List - Collapsible */}
-      <Collapsible open={showImages} onOpenChange={setShowImages}>
+      <Collapsible
+        className="flex flex-col"
+        open={showImages}
+        onOpenChange={setShowImages}
+      >
         <CollapsibleTrigger asChild>
           <Button variant="ghost" className="w-full justify-between p-4 h-auto">
             <div className="flex items-center gap-2">
@@ -118,7 +140,7 @@ export function ImageSidebar({
           </Button>
         </CollapsibleTrigger>
         <CollapsibleContent className="flex-1 overflow-hidden">
-          <ScrollArea className="h-[320px] px-4">
+          <ScrollArea className="h-[calc(100vh-420px)] px-4">
             <div className="space-y-2 pb-4">
               {images.length === 0 ? (
                 <div className="text-center py-8">
@@ -183,13 +205,12 @@ export function ImageSidebar({
           <div className="p-2 pt-0">
             <div className="flex gap-2 mb-3">
               <Input
+                ref={inputRef}
                 placeholder={t("add_label")}
-                value={newLabel}
-                onChange={(e) => setNewLabel(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && addLabel()}
-                className="text-sm"
+                className="h-8 px-2 py-1"
+                onKeyDown={(e) => e.key === "Enter" && addLabel()}
               />
-              <Button size="sm" onClick={addLabel} disabled={!newLabel.trim()}>
+              <Button size="sm" onClick={addLabel}>
                 <Plus className="h-4 w-4" />
               </Button>
             </div>

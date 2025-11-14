@@ -1,6 +1,6 @@
 "use client";
 
-import { KeyboardEvent, useEffect, useRef, useImperativeHandle } from "react";
+import { KeyboardEvent, useEffect, useRef } from "react";
 import MarkCanvas from "@labelz/mark-board";
 import styles from "./mark.module.css";
 
@@ -31,6 +31,7 @@ export interface MarkRef {
   getObjects: () => any[];
   getInstance: () => MarkCanvas;
 }
+
 interface MarkProps {
   markItem?: MarkConfig;
   onShapeChange?: (b: any) => void;
@@ -78,10 +79,9 @@ export function Mark({
       });
     };
     const onResize = () => {
-      canvas.setLayout({
-        width: canvas.img.naturalWidth,
-        height: canvas.img.naturalHeight,
-      });
+      if (canvas.img) {
+        canvas.handleResize()
+      }
     };
     const onkeydown = (e: KeyboardEvent) => {
       onKeyDownRef.current?.(e);
@@ -93,7 +93,7 @@ export function Mark({
     canvas.on("onkeydown", onkeydown);
     window.addEventListener("resize", onResize);
 
-    // 把操作方法绑定到父组件传来的 ref
+    // bind ref
     if (ref) {
       ref.current = {
         getSelectObject: () => {
@@ -136,7 +136,7 @@ export function Mark({
     };
   }, []);
 
-  // markItem 更新
+  // config update
   useEffect(() => {
     configRef.current = markItem;
   }, [markItem]);

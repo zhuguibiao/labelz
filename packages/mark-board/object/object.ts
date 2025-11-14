@@ -70,7 +70,7 @@ class MarkObject implements MarkObject {
    * 设置选中状态
    * @param select
    */
-  setSelect(select?: boolean) {
+  setSelect() {
     // 清空已有选中
     if (this.box.selectObject) {
       this.box.selectObject.status = "done";

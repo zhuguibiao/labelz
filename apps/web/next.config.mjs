@@ -1,12 +1,16 @@
 /** @type {import('next').NextConfig} */
 const isProd = process.env.NODE_ENV === "production";
+const isWebBuild = process.env.NEXT_PUBLIC_TARGET === "web";
+
+console.log("platform:", process.env.NEXT_PUBLIC_TARGET);
 
 const nextConfig = {
-  transpilePackages: ["@labelz/ui"],
+  basePath: isProd && isWebBuild ? "/labelz" : undefined,
+  assetPrefix: isProd && isWebBuild ? "/labelz/" : undefined,
   reactStrictMode: false,
   output: "export",
-  basePath: isProd ? "/labelz" : "",
-  assetPrefix: isProd ? "/labelz/" : "",
+  transpilePackages: ["@labelz/ui"],
+  images: { unoptimized: true },
   eslint: {
     ignoreDuringBuilds: true,
     dirs: ["app", "config", "hooks", "lib", "test", "types", "utils"],
