@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@labelz/ui/components/select";
+import { Input } from "@labelz/ui/components/input";
 import { Square, Circle, Download, Hexagon, ImageIcon } from "lucide-react";
 import { Mark } from "./mark";
 import { useShallow } from "zustand/shallow";
@@ -36,6 +37,7 @@ interface ImageAnnotatorProps {
 
 export function ImageAnnotator({ item, labels }: ImageAnnotatorProps) {
   const [selectedLabel, setSelectedLabel] = useState<string>(labels[0] || "");
+  const [shapeColor, setShapeColor] = useState<string>("#ff0000");
   const [annotations, setAnnotations] = useState<any[]>([]);
   const markRef = useRef<any>({});
   const { t } = useI18n();
@@ -85,12 +87,12 @@ export function ImageAnnotator({ item, labels }: ImageAnnotatorProps) {
   );
 
   const onKeyDown = (e: KeyboardEvent) => {
-    if (e.code === "ArrowLeft") {
+    if (e.code === "ArrowLeft" || e.code === "KeyA") {
       if (currentIndex > 0) {
         setCurrentIndex(currentIndex - 1);
       }
     }
-    if (e.code === "ArrowRight") {
+    if (e.code === "ArrowRight" || e.code === "KeyD") {
       if (currentIndex < images.length - 1) {
         setCurrentIndex(currentIndex + 1);
       }
@@ -163,10 +165,17 @@ export function ImageAnnotator({ item, labels }: ImageAnnotatorProps) {
                 ))}
               </SelectContent>
             </Select>
+            <Input
+              className="w-[50px]"
+              onChange={(e) => {
+                setShapeColor(e.target.value);
+              }}
+              type="color"
+              defaultValue="#ff0000"
+            />
 
             <div className="flex items-center ml-auto gap-2">
               <Guide />
-
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" size="icon" className="relative">
@@ -225,7 +234,7 @@ export function ImageAnnotator({ item, labels }: ImageAnnotatorProps) {
             markItem={{
               id: item.id,
               label: selectedLabel,
-              color: "red",
+              color: shapeColor,
               backgroundUrl: item.imageUrl,
               shapes: item.shapes,
             }}

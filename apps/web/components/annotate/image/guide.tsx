@@ -44,7 +44,7 @@ export default function Guide() {
               <b>公共操作</b>：<div>1. 移动：点击图形 长按拖动</div>
               <div>2. 编辑：调整白色点拖动改变大小</div>
               <div>3. 删除：按 Delete / Backspace 键删除选中的图形</div>
-              <div>{"5. <- ->左右方向键盘 切换图片"}</div>
+              <div>{"4. A D 或 <- ->左右方向键盘 切换图片"}</div>
             </div>
           </div>
         </PopoverContent>
