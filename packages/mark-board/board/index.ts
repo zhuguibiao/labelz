@@ -121,10 +121,8 @@ export default class CanvasMarkBoard implements ICanvasMarkBoard {
   /** 清除canvas */
   clearCanvas(ctx: CanvasRenderingContext2D) {
     ctx.save();
-    ctx.globalCompositeOperation = "copy";
-    ctx.beginPath();
-    ctx.lineTo(0, 0);
-    ctx.stroke();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.restore();
   }
   /**
